@@ -40,3 +40,69 @@
 .read-the-docs {
   color: #888;
 }
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f0f0f0;
+  color: #333;
+}
+
+.App-header {
+  text-align: center;
+  padding: 50px 0;
+  background-color: #282c34;
+  color: white;
+}
+
+.profile {
+  text-align: center;
+  margin: 20px auto;
+  max-width: 800px;
+}
+
+.profile-pic {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.technologies {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.tech-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 20px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.tech-item {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  /* Centers items vertically */
+  align-items: center;
+  /* Centers items horizontally */
+  text-align: center;
+  /* Ensures the text is centered below the logo */
+}
+
+.tech-logo {
+  width: 60px;
+  height: 60px;
+  margin-bottom: 10px;
+  /* Space between the logo and the text */
+}
+
+footer {
+  text-align: center;
+  padding: 20px 0;
+  background-color: #282c34;
+  color: white;
+  margin-top: 40px;
+}
