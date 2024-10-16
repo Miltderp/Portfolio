@@ -7,8 +7,9 @@ const Profile: React.FC = () =>
         <section className="profile">
             <img src={profilePic} alt="Your Name" className="profile-pic" />
             <p>
-                Hello! I'm a software engineer with a passion for developing scalable and efficient solutions.
-                I love learning new technologies and tackling complex problems.
+                Hello! I’m an aspiring software engineer with a passion for creating 
+                innovative solutions to complex problems. I actively seek out new technologies 
+                and strive to expand my knowledge, continuously learning and adapting to the ever-evolving tech landscape.
             </p>
         </section>
     );
