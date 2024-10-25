@@ -1,68 +1,59 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
+@layer base {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --background: 212 16% 13%;
+    --foreground: 72 11% 84%;
+
+    --muted: 215 22% 22%;
+    --muted-foreground: 215 16% 47%;
+
+    --popover: 212 16% 13%;
+    --popover-foreground: 72 11% 84%;
+
+    --card: 215 22% 22%;
+    --card-foreground: 72 11% 84%;
+
+    --border: 215 22% 22%;
+    --input: 215 22% 22%;
+
+    --primary: 199 70% 24%;
+    --primary-foreground: 72 11% 84%;
+
+    --secondary: 201 19% 51%;
+    --secondary-foreground: 72 11% 84%;
+
+    --accent: 201 19% 51%;
+    --accent-foreground: 72 11% 84%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 72 11% 84%;
+
+    --ring: 201 19% 51%;
+
+    --radius: 0.5rem;
   }
-  a:hover {
-    color: #747bff;
+
+  html {
+    @apply antialiased;
   }
-  button {
-    background-color: #f9f9f9;
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+}
+
+@layer utilities {
+  .container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
 }
