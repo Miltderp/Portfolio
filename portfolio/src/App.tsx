@@ -1,23 +1,23 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { GithubIcon, LinkedinIcon, MailIcon, FileIcon } from 'lucide-react'
+import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon } from 'lucide-react'
 
-const Header = () => (
+const Header = ({ scrollTo }: { scrollTo: (id: string) => void }) => (
   <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex h-14 items-center justify-center">
         <nav className="flex items-center space-x-4 lg:space-x-6">
           {['About', 'Technologies', 'Projects', 'Contact'].map((item) => (
-            <a
+            <button
               key={item}
-              href={`#${item.toLowerCase()}`}
+              onClick={() => scrollTo(item.toLowerCase())}
               className="text-sm font-medium transition-colors hover:text-secondary"
             >
               {item}
-            </a>
+            </button>
           ))}
         </nav>
       </div>
@@ -73,18 +73,18 @@ const Profile = () => (
 const Technologies = () =>
 {
   const techs = [
-    { name: 'React', logo: '/react.png' }, 
-    { name: 'Angular', logo: '/aws-logo.png' },
-    { name: 'TypeScript', logo: '/typescript-logo.png' }, 
-    { name: 'HTML', logo: '/typescript-logo.png' }, 
-    { name: 'JavaScript', logo: '/docker-logo.png' },
-    { name: 'Python', logo: '/python-logo.png' },
-    { name: 'C#', logo: '/python-logo.png' },
-    { name: 'Node.js', logo: '/nodejs-logo.png' },
-    { name: 'Firebase API', logo: '/nodejs-logo.png' },
-    { name: 'Flask', logo: '/typescript-logo.png' }, 
-    { name: 'mySQL', logo: '/python-logo.png' },
-    { name: 'MongoDB', logo: '/python-logo.png' },
+    { name: 'React', logo: '/react.png' },
+    { name: 'Angular', logo: '/angular.png' },
+    { name: 'HTML', logo: '/html.png' },
+    { name: 'CSS', logo: '/css.png' },
+    { name: 'JavaScript', logo: '/javascript.png' },
+    { name: 'Python', logo: '/python.png' },
+    { name: 'C#', logo: '/csharp.png' },
+    { name: 'Node.js', logo: '/node.png' },
+    { name: 'Firebase API', logo: '/firebase.png' },
+    { name: 'Flask', logo: '/flask.png' },
+    { name: 'mySQL', logo: '/msql.png' },
+    { name: 'MongoDB', logo: '/mongo.png' },
   ]
 
   return (
@@ -103,32 +103,40 @@ const Projects = () =>
 {
   const projects = [
     {
-      title: 'Fast Supper',
+      title: 'TheFastSupper',
       description: 'A MERN stack application that provides food recommendations based on user feedback',
-      image: '/Fast.png'
+      image: '/Fast.png',
+      url: 'https://github.com/Miltderp/TheFastSupper'
     },
     {
       title: 'Advanced Analytical Identification of Turbine Components',
       description: 'An iOS application that allows users to identify turbine components with their choice of method. Optical Character Recognition, barcode scanning or voice entry',
-      image: '/AAITC.png'
+      image: '/AAITC.png',
+      url: 'https://aaitc.example.com'
     },
     {
       title: 'C.Ai.T.S',
       description: 'A photo gallery application that leverages Google Vision API to allow users to upload and download photos of cats... and ONLY cats.',
-      image: '/Caits.webp'
+      image: '/Caits.webp',
+      url: 'https://caits.example.com'
     },
   ]
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project, index) => (
-        <Card key={index} className="bg-card">
-          <CardContent className="p-4">
-            <img src={project.image} alt={project.title} className="w-full h-40 object-cover mb-4 rounded" />
-            <h3 className="text-lg font-semibold mb-2 text-foreground">{project.title}</h3>
-            <p className="text-muted-foreground">{project.description}</p>
-          </CardContent>
-        </Card>
+        <a href={project.url} key={index} target="_blank" rel="noopener noreferrer" className="block h-full">
+          <Card className="bg-card cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg h-full flex flex-col">
+            <CardContent className="p-4 flex flex-col h-full">
+              <img src={project.image} alt={project.title} className="w-full h-40 object-cover mb-4 rounded" />
+              <h3 className="text-lg font-semibold mb-2 text-foreground flex items-center">
+                {project.title}
+                <ExternalLinkIcon className="ml-2 h-4 w-4" />
+              </h3>
+              <p className="text-muted-foreground flex-grow">{project.description}</p>
+            </CardContent>
+          </Card>
+        </a>
       ))}
     </div>
   )
@@ -188,6 +196,26 @@ const ContactForm = () =>
 export default function App()
 {
   const [activeSection, setActiveSection] = useState('')
+  const aboutRef = useRef<HTMLElement>(null)
+  const technologiesRef = useRef<HTMLElement>(null)
+  const projectsRef = useRef<HTMLElement>(null)
+  const contactRef = useRef<HTMLElement>(null)
+
+  const scrollTo = (id: string) =>
+  {
+    const refMap: { [key: string]: React.RefObject<HTMLElement> } = {
+      about: aboutRef,
+      technologies: technologiesRef,
+      projects: projectsRef,
+      contact: contactRef
+    }
+
+    const ref = refMap[id]
+    if (ref && ref.current)
+    {
+      ref.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   useEffect(() =>
   {
@@ -205,9 +233,13 @@ export default function App()
       { threshold: 0.5 }
     )
 
-    document.querySelectorAll('section').forEach((section) =>
+    const sections = [aboutRef, technologiesRef, projectsRef, contactRef]
+    sections.forEach((section) =>
     {
-      observer.observe(section)
+      if (section.current)
+      {
+        observer.observe(section.current)
+      }
     })
 
     return () => observer.disconnect()
@@ -215,28 +247,28 @@ export default function App()
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
-      <Header />
+      <Header scrollTo={scrollTo} />
       <main className="flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <section id="about" className="py-20">
+          <section id="about" ref={aboutRef} className="py-20">
             <div className="container">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">About Me</h2>
               <Profile />
             </div>
           </section>
-          <section id="technologies" className="py-20 bg-muted">
+          <section id="technologies" ref={technologiesRef} className="py-20 bg-muted">
             <div className="container">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">Technologies I Work With</h2>
               <Technologies />
             </div>
           </section>
-          <section id="projects" className="py-20">
+          <section id="projects" ref={projectsRef} className="py-20">
             <div className="container">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">My Projects</h2>
               <Projects />
             </div>
           </section>
-          <section id="contact" className="py-20 bg-muted">
+          <section id="contact" ref={contactRef} className="py-20 bg-muted">
             <div className="container">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">Contact Me</h2>
               <ContactForm />
