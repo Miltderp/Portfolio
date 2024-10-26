@@ -76,7 +76,7 @@ const About = () =>
           </div>
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-foreground">Milton Joseph</h2>
-            <p className="text-muted-foreground">
+            <p className="text-gray-300">
               Hello! I'm an aspiring software engineer with a passion for creating
               innovative solutions to complex problems. I actively seek out new technologies
               and strive to expand my knowledge, continuously learning and adapting to the ever-evolving tech landscape.
