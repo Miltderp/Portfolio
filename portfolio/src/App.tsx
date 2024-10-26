@@ -10,7 +10,7 @@ const Header = ({ scrollTo }: { scrollTo: (id: string) => void }) => (
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex h-14 items-center justify-center">
         <nav className="flex items-center space-x-4 lg:space-x-6">
-          {['About', 'Technologies', 'Projects', 'Contact'].map((item) => (
+          {['About', 'Projects', 'Contact'].map((item) => (
             <button
               key={item}
               onClick={() => scrollTo(item.toLowerCase())}
@@ -50,27 +50,7 @@ const Footer = () => (
   </footer>
 )
 
-const Profile = () => (
-  <Card className="w-full max-w-3xl mx-auto bg-card">
-    <CardContent className="flex flex-col md:flex-row items-center gap-6 p-6">
-      <img src="/p.png" alt="Milton Joseph" className="rounded-full w-48 h-48 object-cover" />
-      <div className="space-y-4">
-        <h2 className="text-2xl font-bold text-foreground">Milton Joseph</h2>
-        <p className="text-muted-foreground">
-          Hello! I'm an aspiring software engineer with a passion for creating
-          innovative solutions to complex problems. I actively seek out new technologies
-          and strive to expand my knowledge, continuously learning and adapting to the ever-evolving tech landscape.
-        </p>
-        <Button variant="outline" className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-          <FileIcon className="h-4 w-4" />
-          Download Resume
-        </Button>
-      </div>
-    </CardContent>
-  </Card>
-)
-
-const Technologies = () =>
+const About = () =>
 {
   const techs = [
     { name: 'React', logo: '/react.png' },
@@ -88,16 +68,42 @@ const Technologies = () =>
   ]
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
-      {techs.map((tech) => (
-        <div key={tech.name} className="flex flex-col items-center">
-          <img src={tech.logo} alt={tech.name} className="w-16 h-16 mb-2" />
-          <p className="text-sm font-medium text-foreground">{tech.name}</p>
+    <div className="space-y-12">
+      <Card className="w-full max-w-3xl mx-auto bg-card">
+        <CardContent className="flex flex-col md:flex-row items-center gap-6 p-6">
+          <div className="w-48 h-48 rounded-full overflow-hidden flex-shrink-0">
+            <img src="/p.png" alt="Milton Joseph" className="w-full h-full object-cover" />
+          </div>
+          <div className="space-y-4">
+            <h2 className="text-2xl font-bold text-foreground">Milton Joseph</h2>
+            <p className="text-muted-foreground">
+              Hello! I'm an aspiring software engineer with a passion for creating
+              innovative solutions to complex problems. I actively seek out new technologies
+              and strive to expand my knowledge, continuously learning and adapting to the ever-evolving tech landscape.
+            </p>
+            <Button variant="outline" className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+              <FileIcon className="h-4 w-4" />
+              Download Resume
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div>
+        <h3 className="text-2xl font-bold mb-6 text-center text-foreground">Technologies I Work With</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8">
+          {techs.map((tech) => (
+            <div key={tech.name} className="flex flex-col items-center">
+              <img src={tech.logo} alt={tech.name} className="w-16 h-16 mb-2" />
+              <p className="text-sm font-medium text-foreground">{tech.name}</p>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   )
 }
+
 
 const Projects = () =>
 {
@@ -105,8 +111,8 @@ const Projects = () =>
     {
       title: 'TheFastSupper',
       description: 'A MERN stack application that provides food recommendations based on user feedback',
-      image: '/Fast.png',
-      url: 'https://github.com/Miltderp/TheFastSupper'
+      image: '/burger.png',
+      url: 'https://thefastsupper.example.com'
     },
     {
       title: 'Advanced Analytical Identification of Turbine Components',
@@ -197,7 +203,6 @@ export default function App()
 {
   const [activeSection, setActiveSection] = useState('')
   const aboutRef = useRef<HTMLElement>(null)
-  const technologiesRef = useRef<HTMLElement>(null)
   const projectsRef = useRef<HTMLElement>(null)
   const contactRef = useRef<HTMLElement>(null)
 
@@ -205,7 +210,6 @@ export default function App()
   {
     const refMap: { [key: string]: React.RefObject<HTMLElement> } = {
       about: aboutRef,
-      technologies: technologiesRef,
       projects: projectsRef,
       contact: contactRef
     }
@@ -233,7 +237,7 @@ export default function App()
       { threshold: 0.5 }
     )
 
-    const sections = [aboutRef, technologiesRef, projectsRef, contactRef]
+    const sections = [aboutRef, projectsRef, contactRef]
     sections.forEach((section) =>
     {
       if (section.current)
@@ -250,26 +254,20 @@ export default function App()
       <Header scrollTo={scrollTo} />
       <main className="flex-grow">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <section id="about" ref={aboutRef} className="py-20">
-            <div className="container">
+          <section id="about" ref={aboutRef} className="py-20 min-h-screen flex items-center">
+            <div className="w-full">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">About Me</h2>
-              <Profile />
+              <About />
             </div>
           </section>
-          <section id="technologies" ref={technologiesRef} className="py-20 bg-muted">
-            <div className="container">
-              <h2 className="text-3xl font-bold mb-10 text-center text-foreground">Technologies I Work With</h2>
-              <Technologies />
-            </div>
-          </section>
-          <section id="projects" ref={projectsRef} className="py-20">
-            <div className="container">
+          <section id="projects" ref={projectsRef} className="py-20 min-h-screen flex items-center">
+            <div className="w-full">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">My Projects</h2>
               <Projects />
             </div>
           </section>
-          <section id="contact" ref={contactRef} className="py-20 bg-muted">
-            <div className="container">
+          <section id="contact" ref={contactRef} className="py-20 min-h-screen flex items-center">
+            <div className="w-full">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">Contact Me</h2>
               <ContactForm />
             </div>
