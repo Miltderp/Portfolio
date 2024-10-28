@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon, DownloadIcon, ZoomInIcon, ZoomOutIcon } from 'lucide-react'
+import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon, DownloadIcon, ZoomInIcon, ZoomOutIcon, CheckCircle2, XCircle } from 'lucide-react'
+
 
 const Header = ({ scrollTo }: { scrollTo: (id: string) => void }) => (
   <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -203,54 +204,138 @@ const Resume = () =>
   )
 }
 
-const ContactForm = () =>
-{
+const ContactForm = () => 
+  {
   const [formState, setFormState] = useState({ name: '', email: '', message: '' })
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [notification, setNotification] = useState<{ type: 'success' | 'error', message: string } | null>(null)
+  const [accessKey, setAccessKey] = useState<string | null>(null)
+
+  useEffect(() =>
+  {
+    const key = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY
+    setAccessKey(key || null)
+  }, [])
 
   const handleSubmit = async (e: React.FormEvent) =>
   {
     e.preventDefault()
+    setIsSubmitting(true)
+    setNotification(null)
+
+    if (!accessKey)
+    {
+      console.error("Access key is missing")
+      setNotification({
+        type: 'error',
+        message: "Configuration error. Please contact the administrator."
+      })
+      setIsSubmitting(false)
+      return
+    }
+
+    const formData = new FormData()
+    Object.entries(formState).forEach(([key, value]) =>
+    {
+      formData.append(key, value)
+    })
+    formData.append('access_key', accessKey)
+
     try
     {
-      // Here you would typically send the form data to your backend
-      // For now, we'll just simulate an API call
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      console.log('Form submitted:', formState)
-      alert('Thank you for your message! I\'ll get back to you soon.')
-      setFormState({ name: '', email: '', message: '' })
+      console.log("Submitting form with access key:", accessKey) // For debugging
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      })
+
+      const data = await response.json()
+      console.log("Response:", data) // For debugging
+
+      if (data.success)
+      {
+        setNotification({
+          type: 'success',
+          message: "Thank you for your message. I'll get back to you soon."
+        })
+        setFormState({ name: '', email: '', message: '' })
+      } else
+      {
+        throw new Error(data.message || 'Failed to send message')
+      }
     } catch (error)
     {
       console.error('Error submitting form:', error)
-      alert('There was an error sending your message. Please try again later.')
+      setNotification({
+        type: 'error',
+        message: "There was an error sending your message. Please try again later."
+      })
+    } finally
+    {
+      setIsSubmitting(false)
     }
   }
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+  {
+    const { name, value } = e.target
+    setFormState(prev => ({ ...prev, [name]: value }))
+  }
+
   return (
-    <form onSubmit={handleSubmit} className="space-y-4 max-w-md mx-auto">
-      <Input
-        placeholder="Your Name"
-        value={formState.name}
-        onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-        required
-        className="bg-input text-foreground"
-      />
-      <Input
-        type="email"
-        placeholder="Your Email"
-        value={formState.email}
-        onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-        required
-        className="bg-input text-foreground"
-      />
-      <Textarea
-        placeholder="Your Message"
-        value={formState.message}
-        onChange={(e) => setFormState({ ...formState, message: e.target.value })}
-        required
-        className="bg-input text-foreground"
-      />
-      <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-primary/90">Send Message</Button>
-    </form>
+    <div className="space-y-6 max-w-md mx-auto">
+      {notification && (
+        <Card className={`p-4 ${notification.type === 'success' ? 'bg-green-100' : 'bg-red-100'}`}>
+          <div className="flex items-center space-x-2">
+            {notification.type === 'success' ? (
+              <CheckCircle2 className="h-5 w-5 text-green-600" />
+            ) : (
+              <XCircle className="h-5 w-5 text-red-600" />
+            )}
+            <p className={notification.type === 'success' ? 'text-green-700' : 'text-red-700'}>
+              {notification.message}
+            </p>
+          </div>
+        </Card>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <Input
+          name="name"
+          placeholder="Your Name"
+          value={formState.name}
+          onChange={handleChange}
+          required
+          className="bg-input text-foreground"
+          disabled={isSubmitting}
+        />
+        <Input
+          name="email"
+          type="email"
+          placeholder="Your Email"
+          value={formState.email}
+          onChange={handleChange}
+          required
+          className="bg-input text-foreground"
+          disabled={isSubmitting}
+        />
+        <Textarea
+          name="message"
+          placeholder="Your Message"
+          value={formState.message}
+          onChange={handleChange}
+          required
+          className="bg-input text-foreground"
+          disabled={isSubmitting}
+        />
+        <Button
+          type="submit"
+          className="w-full bg-primary text-primary-foreground hover:bg-primary/90"
+          disabled={isSubmitting || !accessKey}
+        >
+          {isSubmitting ? 'Sending...' : 'Send Message'}
+        </Button>
+      </form>
+    </div>
   )
 }
 
