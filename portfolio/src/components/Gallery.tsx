@@ -34,23 +34,23 @@ const Gallery: React.FC = () =>
     return (
         <div className="min-h-screen bg-[#121212] text-[#EDEDED] font-['Commissioner',sans-serif]">
             <header className="fixed top-0 left-0 w-full flex flex-col items-center px-4 sm:px-6 lg:px-8 py-2 z-50 bg-[#121212]">
-                <div className="w-full flex justify-between items-center h-[100px]">
+                <div className="w-full flex justify-between items-center h-[60px] sm:h-[100px]">
                     <div className="flex items-center">
-                        <Cat className="h-8 w-8 mr-2" />
-                        <h1 className="text-2xl font-bold">C.Ai.T.S - CAT GALLERY</h1>
+                        <Cat className="h-6 w-6 sm:h-8 sm:w-8 mr-2" />
+                        <h1 className="text-lg sm:text-2xl font-bold">C.Ai.T.S - CAT GALLERY</h1>
                     </div>
                     <nav>
-                        <Link to="/" className="hover:text-secondary transition-colors">HOME</Link>
+                        <Link to="/" className="text-sm sm:text-base hover:text-secondary transition-colors">HOME</Link>
                     </nav>
                 </div>
-                <div className="text-yellow-400 text-sm font-semibold">
+                <div className="text-yellow-400 text-xs sm:text-sm font-semibold text-center w-full py-1">
                     This app is still in development. Some features are not yet available.
                 </div>
             </header>
 
-            <main className="pt-[140px] px-4 sm:px-6 lg:px-8">
+            <main className="pt-[100px] sm:pt-[140px] px-4 sm:px-6 lg:px-8">
                 <div className="mb-8 max-w-md mx-auto">
-                    <h2 className="text-2xl font-bold mb-4">Upload a Cat Photo</h2>
+                    <h2 className="text-xl sm:text-2xl font-bold mb-4">Upload a Cat Photo</h2>
                     <div className="flex flex-col sm:flex-row items-center gap-4">
                         <Input
                             type="file"
