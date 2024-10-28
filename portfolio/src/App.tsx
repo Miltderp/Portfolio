@@ -1,9 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon, DownloadIcon, ZoomInIcon, ZoomOutIcon, CheckCircle2, XCircle } from 'lucide-react'
+import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon, DownloadIcon, ZoomInIcon, ZoomOutIcon, CheckCircle2, XCircle, Upload, Cat } from 'lucide-react'
+import Gallery from './components/Gallery'
 
 
 const Header = ({ scrollTo }: { scrollTo: (id: string) => void }) => (
@@ -122,35 +124,51 @@ const Projects = () =>
       title: 'Advanced Analytical Identification of Turbine Components',
       description: 'An iOS application that allows users to identify turbine components with their choice of method. Optical Character Recognition, barcode scanning or voice entry',
       image: '/AAITC.png',
-      url: 'https://aaitc.example.com'
+      url: 'https://github.com/Miltderp/AAITC/tree/main'
     },
     {
-      title: 'C.Ai.T.S',
+      title: 'C.Ai.T.S ',
       description: 'A photo gallery application that leverages Google Vision API to allow users to upload and download photos of cats... and ONLY cats.',
       image: '/Caits.webp',
-      url: 'https://caits.example.com'
+      url: '/C.Ai.T.S'
     },
   ]
 
   return (
     <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
       {projects.map((project, index) => (
-        <a href={project.url} key={index} target="_blank" rel="noopener noreferrer" className="block h-full">
-          <Card className="bg-card cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg h-full flex flex-col">
-            <CardContent className="p-4 flex flex-col h-full">
-              <img src={project.image} alt={project.title} className="w-full h-40 object-cover mb-4 rounded" />
-              <h3 className="text-lg font-semibold mb-2 text-foreground flex items-center">
-                {project.title}
-                <ExternalLinkIcon className="ml-2 h-4 w-4" />
-              </h3>
-              <p className="text-muted-foreground flex-grow">{project.description}</p>
-            </CardContent>
-          </Card>
-        </a>
+        project.url.startsWith('http') ? (
+          <a href={project.url} key={index} target="_blank" rel="noopener noreferrer" className="block h-full">
+            <Card className="bg-card cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg h-full flex flex-col">
+              <CardContent className="p-4 flex flex-col h-full">
+                <img src={project.image} alt={project.title} className="w-full h-40 object-cover mb-4 rounded" />
+                <h3 className="text-lg font-semibold mb-2 text-foreground flex items-center">
+                  {project.title}
+                  <ExternalLinkIcon className="ml-2 h-4 w-4" />
+                </h3>
+                <p className="text-muted-foreground flex-grow">{project.description}</p>
+              </CardContent>
+            </Card>
+          </a>
+        ) : (
+          <Link to={project.url} key={index} className="block h-full">
+            <Card className="bg-card cursor-pointer transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg h-full flex flex-col">
+              <CardContent className="p-4 flex flex-col h-full">
+                <img src={project.image} alt={project.title} className="w-full h-40 object-cover mb-4 rounded" />
+                <h3 className="text-lg font-semibold mb-2 text-foreground flex items-center">
+                  {project.title}
+                  <ExternalLinkIcon className="ml-2 h-4 w-4" />
+                </h3>
+                <p className="text-muted-foreground flex-grow">{project.description}</p>
+              </CardContent>
+            </Card>
+          </Link>
+        )
       ))}
     </div>
   )
 }
+
 
 const Resume = () =>
 {
@@ -339,7 +357,96 @@ const ContactForm = () =>
   )
 }
 
-export default function App()
+// const Gallery = () =>
+// {
+//   const [images, setImages] = useState<string[]>([])
+//   const [uploading, setUploading] = useState(false)
+
+//   useEffect(() =>
+//   {
+//     // Simulating fetching images from an API
+//     setImages(['/img/cat1.jpg', '/img/cat2.jpg', '/img/cat3.jpg'])
+//   }, [])
+
+//   const handleUpload = async (event: React.ChangeEvent<HTMLInputElement>) =>
+//   {
+//     const file = event.target.files?.[0]
+//     if (!file) return
+
+//     setUploading(true)
+
+//     // Simulating API call to Google Vision API and image upload
+//     setTimeout(() =>
+//     {
+//       setImages(prev => [`/img/cat${prev.length + 1}.jpg`, ...prev])
+//       setUploading(false)
+//     }, 2000)
+//   }
+
+//   return (
+//     <div className="min-h-screen bg-background text-foreground">
+//       <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+//         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+//           <div className="flex h-14 items-center justify-between">
+//             <div className="flex items-center">
+//               <Cat className="h-8 w-8 mr-2" />
+//               <h1 className="text-xl font-bold">C.Ai.T.S Cat Gallery</h1>
+//             </div>
+//             <nav>
+//               <Link to="/" className="text-sm font-medium transition-colors hover:text-primary">
+//                 Back to Portfolio
+//               </Link>
+//             </nav>
+//           </div>
+//         </div>
+//       </header>
+
+//       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+//         <div className="mb-8">
+//           <h2 className="text-2xl font-bold mb-4">Upload a Cat Photo</h2>
+//           <div className="flex items-center">
+//             <Input
+//               type="file"
+//               accept="image/*"
+//               onChange={handleUpload}
+//               disabled={uploading}
+//               className="mr-4"
+//             />
+//             <Button disabled={uploading}>
+//               {uploading ? (
+//                 <>
+//                   <Upload className="mr-2 h-4 w-4 animate-spin" />
+//                   Uploading...
+//                 </>
+//               ) : (
+//                 <>
+//                   <Upload className="mr-2 h-4 w-4" />
+//                   Upload
+//                 </>
+//               )}
+//             </Button>
+//           </div>
+//         </div>
+
+//         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+//           {images.map((src, index) => (
+//             <Card key={index} className="overflow-hidden">
+//               <img src={src} alt={`Cat ${index + 1}`} className="w-full h-48 object-cover" />
+//               <CardContent className="p-4">
+//                 <Button variant="outline" className="w-full">
+//                   <DownloadIcon className="mr-2 h-4 w-4" />
+//                   Download
+//                 </Button>
+//               </CardContent>
+//             </Card>
+//           ))}
+//         </div>
+//       </main>
+//     </div>
+//   )
+// }
+
+const MainContent = () =>
 {
   const [activeSection, setActiveSection] = useState('')
   const aboutRef = useRef<HTMLElement>(null)
@@ -424,5 +531,17 @@ export default function App()
       </main>
       <Footer />
     </div>
+  )
+}
+
+export default function App()
+{
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<MainContent />} />
+        <Route path="/C.Ai.T.S" element={<Gallery />} />
+      </Routes>
+    </Router>
   )
 }

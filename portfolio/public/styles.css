@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Commissioner:wght@100..900&display=swap');
+
+body {
+    /* background-color: #242223; */
+    background-color: #121212;
+}
+
+
+
+header {
+    color: #EDEDED;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 100px;
+    box-sizing: border-box;
+    height: 100px;
+}
+
+header ul {
+    display: flex;
+    list-style: none;
+    gap: 50px;
+}
+
+@property --rotate {
+    syntax: "<angle";
+    initial-value: 0deg;
+    inherits: false;
+}
+.home {
+    color: #EDEDED;
+    font-family: 'Comissioner', sans-serif;
+    font-weight: 600;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    margin: 0;
+    /* background-color: #121212; */
+    background-image: 
+        url(img/wpgradient.jpg);
+    color: #eee5;
+    background-size: cover;
+} 
+.light {
+    background-image: 
+        conic-gradient(
+            from var (--rotate) at 29% 10%,
+            #0B1012 40%,
+            #F4F7FC55,
+            #0B1012 60%
+        );
+    font-size: 120px;
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: rotateLight
+            3s ease-in-out infinite
+            alternate;
+}
+
+@keyframes rotateLight {
+    from {
+        --rotate: 0.15turn
+    }
+    to {
+        --rotate: -0.15turn
+    }
+    
+}
+
+img {
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+p {
+    font-size: 72px;
+    margin: 0 5px;
+    color: white;
+}
+
+.grid {
+    columns: 300px;
+}
+.list {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 250px;
+    padding-top: 250px;
+    transform: perspective(1000px);
+    transform-style: preserve-3d;
+}
+
+.list .item {
+    transition: 1.25s;
+    filter: brightness(0);
+}
+
+.list .item:hover {
+    filter: brightness(1);
+    transform: translateZ(200px);
+}
+
+.list .item:hover + * {
+    filter: brightness(0.6);
+    transform: translateZ(150px) rotateY(40deg);
+}
+
+.list .item:hover + * + * {
+    filter: brightness(0.4);
+    transform: translateZ(70px) rotateY(20deg);
+}
+
+.list .item:hover + * + * + * {
+    filter: brightness(0.2);
+    transform: translateZ(30px) rotateY(10deg);
+}
+
+.list .item:has(+ *:hover) {
+    filter: brightness(0.6);
+    transform: translateZ(150px) rotateY(-40deg);
+}
+
+.list .item:has(+ * + *:hover) {
+    filter: brightness(0.4);
+    transform: translateZ(70px) rotateY(-20deg);
+}
+
+.list .item:has(+ * + * + *:hover) {
+    filter: brightness(0.2);
+    transform: translateZ(30px) rotateY(-10deg);
+}

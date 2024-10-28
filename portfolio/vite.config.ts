@@ -10,4 +10,8 @@ export default defineConfig({
     },
   },
   assetsInclude: ['**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.gif', '**/*.svg'],
+  base: '/',
+  server: {
+    open: true,
+  },
 })
