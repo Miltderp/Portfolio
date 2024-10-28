@@ -3,14 +3,14 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon } from 'lucide-react'
+import { GithubIcon, LinkedinIcon, MailIcon, FileIcon, ExternalLinkIcon, DownloadIcon, ZoomInIcon, ZoomOutIcon } from 'lucide-react'
 
 const Header = ({ scrollTo }: { scrollTo: (id: string) => void }) => (
   <header className="sticky top-0 z-50 w-full border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
     <div className="container mx-auto px-4 sm:px-6 lg:px-8">
       <div className="flex h-14 items-center justify-center">
         <nav className="flex items-center space-x-4 lg:space-x-6">
-          {['About', 'Projects', 'Contact'].map((item) => (
+          {['About', 'Projects', 'Resume', 'Contact'].map((item) => (
             <button
               key={item}
               onClick={() => scrollTo(item.toLowerCase())}
@@ -72,7 +72,7 @@ const About = () =>
       <Card className="w-full max-w-3xl mx-auto bg-card">
         <CardContent className="flex flex-col md:flex-row items-center gap-6 p-6">
           <div className="w-48 h-48 rounded-full overflow-hidden flex-shrink-0">
-            <img src="/p.png" alt="Milton Joseph" className="w-full h-full object-cover" />
+            <img src="/p_optimized.png" alt="Milton Joseph" className="w-full h-full object-cover" />
           </div>
           <div className="space-y-4">
             <h2 className="text-2xl font-bold text-foreground">Milton Joseph</h2>
@@ -81,10 +81,14 @@ const About = () =>
               innovative solutions to complex problems. I actively seek out new technologies
               and strive to expand my knowledge, continuously learning and adapting to the ever-evolving tech landscape.
             </p>
-            <Button variant="outline" className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
-              <FileIcon className="h-4 w-4" />
-              Download Resume
-            </Button>
+            <div className="flex items-center space-x-4">
+              <a href="https://github.com/miltderp" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                <GithubIcon className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+              </a>
+              <a href="https://www.linkedin.com/in/miltonjoseph/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                <LinkedinIcon className="h-6 w-6 text-muted-foreground hover:text-foreground" />
+              </a>
+            </div>
           </div>
         </CardContent>
       </Card>
@@ -104,7 +108,6 @@ const About = () =>
   )
 }
 
-
 const Projects = () =>
 {
   const projects = [
@@ -112,7 +115,7 @@ const Projects = () =>
       title: 'TheFastSupper',
       description: 'A MERN stack application that provides food recommendations based on user feedback',
       image: '/burger.png',
-      url: 'https://thefastsupper.example.com'
+      url: 'https://github.com/Miltderp/TheFastSupper'
     },
     {
       title: 'Advanced Analytical Identification of Turbine Components',
@@ -144,6 +147,58 @@ const Projects = () =>
           </Card>
         </a>
       ))}
+    </div>
+  )
+}
+
+const Resume = () =>
+{
+  const [zoom, setZoom] = useState(100)
+
+  const handleZoomIn = () =>
+  {
+    setZoom(prevZoom => Math.min(prevZoom + 10, 200))
+  }
+
+  const handleZoomOut = () =>
+  {
+    setZoom(prevZoom => Math.max(prevZoom - 10, 50))
+  }
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-between items-center">
+        <h3 className="text-2xl font-bold text-foreground">My Resume</h3>
+        <div className="flex items-center gap-4">
+          <Button onClick={handleZoomOut} variant="outline" className="p-2">
+            <ZoomOutIcon className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium">{zoom}%</span>
+          <Button onClick={handleZoomIn} variant="outline" className="p-2">
+            <ZoomInIcon className="h-4 w-4" />
+          </Button>
+          <Button variant="outline" className="flex items-center gap-2 bg-primary text-primary-foreground hover:bg-primary/90">
+            <DownloadIcon className="h-4 w-4" />
+            <a href="/resume.pdf" download="Milton_Joseph_Resume.pdf">
+              Download PDF
+            </a>
+          </Button>
+        </div>
+      </div>
+      <Card className="w-full bg-card overflow-hidden">
+        <CardContent className="p-6">
+          <div className="w-full overflow-auto">
+            <div style={{ width: `${zoom}%`, transition: 'width 0.3s ease-in-out' }}>
+              <img
+                src="/Resume.jpg"
+                alt="Milton Joseph's Resume"
+                className="w-full h-auto"
+                style={{ maxWidth: 'none' }}
+              />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }
@@ -204,6 +259,7 @@ export default function App()
   const [activeSection, setActiveSection] = useState('')
   const aboutRef = useRef<HTMLElement>(null)
   const projectsRef = useRef<HTMLElement>(null)
+  const resumeRef = useRef<HTMLElement>(null)
   const contactRef = useRef<HTMLElement>(null)
 
   const scrollTo = (id: string) =>
@@ -211,6 +267,7 @@ export default function App()
     const refMap: { [key: string]: React.RefObject<HTMLElement> } = {
       about: aboutRef,
       projects: projectsRef,
+      resume: resumeRef,
       contact: contactRef
     }
 
@@ -237,7 +294,7 @@ export default function App()
       { threshold: 0.5 }
     )
 
-    const sections = [aboutRef, projectsRef, contactRef]
+    const sections = [aboutRef, projectsRef, resumeRef, contactRef]
     sections.forEach((section) =>
     {
       if (section.current)
@@ -264,6 +321,12 @@ export default function App()
             <div className="w-full">
               <h2 className="text-3xl font-bold mb-10 text-center text-foreground">My Projects</h2>
               <Projects />
+            </div>
+          </section>
+          <section id="resume" ref={resumeRef} className="py-20 min-h-screen flex items-center">
+            <div className="w-full">
+              <h2 className="text-3xl font-bold mb-10 text-center text-foreground">Resume</h2>
+              <Resume />
             </div>
           </section>
           <section id="contact" ref={contactRef} className="py-20 min-h-screen flex items-center">
